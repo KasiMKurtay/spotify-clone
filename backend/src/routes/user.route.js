@@ -1,10 +1,10 @@
-import { Router } from "express";
+import { getAllUsers } from "../controller/user.controller.js"; 
+import { protectRoute } from "../middleware/auth.middleware.js";
 
-const router = Router();
+import { Router } from "express"; // Express'ten Router fonksiyonunu alır
 
-router.get("/", (req, res) => {
-  req.auth.userId;
-  res.send("User route with get");
-});
+const router = Router(); // Yeni bir router oluşturur
 
-export default router;
+router.get("/", protectRoute, getAllUsers); // Giriş yapmış kullanıcılar tüm kullanıcıları görebilir
+
+export default router; 

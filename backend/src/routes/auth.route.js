@@ -3,6 +3,6 @@ import { authCallback } from "../controller/auth.controller.js";
 
 const router = Router();
 
-router.get("/callback", authCallback);
+router.get("/calback", authCallback); //Giriş işlemi sonrası yönlendirilen callback
 
 export default router;
