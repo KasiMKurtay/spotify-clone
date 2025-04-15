@@ -5,7 +5,6 @@ import { Loader } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 const AuthCallbackPage = () => {
   const { isLoaded, user } = useUser();
   const navigate = useNavigate();
@@ -33,6 +32,7 @@ const AuthCallbackPage = () => {
 
     syncUser();
   }, [isLoaded, user, navigate]);
+
 
   return (
     <div className="h-screen w-full bg-black flex items-center justify-center">
