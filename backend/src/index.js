@@ -3,6 +3,7 @@ import dotenv from "dotenv"; // .env dosyasındaki ortam değişkenlerini kullan
 import { clerkMiddleware } from "@clerk/express"; // Clerk kimlik doğrulama middleware’i
 import fileUpload from "express-fileupload"; // Dosya yüklemeyi sağlayan middleware
 import path from "path"; // Dosya ve dizin yollarını yönetmek için Node modülü
+import cors from "cors";
 
 // Route dosyalarını içe aktarıyor
 import adminRoutes from "./routes/admin.route.js"; // Adminle ilgili API rotaları
@@ -18,6 +19,12 @@ dotenv.config(); // .env dosyasındaki değişkenleri process.env’ye yükler
 const __dirname = path.resolve(); // Proje dizininin yolunu alır
 const app = express(); // Express uygulamasını başlatır
 const PORT = process.env.PORT; // Ortam değişkeninden port numarasını alır
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.use(express.json()); // Gelen isteklerde JSON body'leri işleyebilmek için
 app.use(clerkMiddleware()); // Clerk kimlik doğrulamasını global olarak uygular

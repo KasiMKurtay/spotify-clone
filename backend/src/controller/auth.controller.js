@@ -6,14 +6,15 @@ export const authCallback = async (req, res, next) => {
   try {
     const { id, firstName, lastName, imageUrl } = req.body; //Request body'den kullanıcı bilgilerini alır
 
-    const user = await User.findOne({ clerckId: id }); //Veritabanında kullanıcı "clerckId" ile arar
+    const user = await User.findOne({ clerkId: id }); //Veritabanında kullanıcı "clerckId" ile arar
 
     if (!user) {
       //Eğer kullanıcı bulunamazsa
       await User.create({
         //Yeni bir kullanıcı oluşturur
-        clerckId: id, //Kullanıcının clerckId'sini kaydeder
+        clerkId: id, //Kullanıcının clerkId'sini kaydeder
         fullName: `${firstName} ${lastName}`, //Kullanıcının tam adını kaydeder
+        imageUrl: imageUrl,
       });
     }
 
@@ -23,3 +24,5 @@ export const authCallback = async (req, res, next) => {
     next(error); //Hata durumunda bir sonraki middleware'ye gecirir
   }
 };
+
+console.log(authCallback);

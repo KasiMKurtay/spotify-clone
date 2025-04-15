@@ -3,6 +3,7 @@ import { authCallback } from "../controller/auth.controller.js";
 
 const router = Router();
 
-router.get("/calback", authCallback); //Giriş işlemi sonrası yönlendirilen callback
+// POST isteği ile gelen callback isteklerini işle
+router.post("/callback", authCallback); // "/auth/callback" yolunu dinler
 
 export default router;
