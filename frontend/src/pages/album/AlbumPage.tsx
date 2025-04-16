@@ -27,7 +27,7 @@ const AlbumPage = () => {
   return (
     <div className="relative h-full">
       {/* Gradient Arka Plan */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#5038a0]/80 via-zinc-900/80 to-zinc-900 pointer-events-none z-0" />
+      <div className="rounded-lg absolute inset-0 bg-gradient-to-b from-[#5038a0]/80 via-zinc-900/80 to-zinc-900 pointer-events-none z-0" />
 
       <ScrollArea className="h-full relative z-10">
         <div className="min-h-full">
@@ -42,9 +42,15 @@ const AlbumPage = () => {
               <p className="text-sm font-medium">Album</p>
               <h2 className="text-7xl font-bold my-4">{currentAlbum?.title}</h2>
               <div className="flex items-center gap-2 text-sm text-zinc-100">
-                <span className="font-medium text-white">{currentAlbum?.artist}</span>
-                <span className="font-medium text-white">{currentAlbum?.songs.length} songs</span>
-                <span className="font-medium text-white">{currentAlbum?.releaseYear}</span>
+                <span className="font-medium text-white">
+                  {currentAlbum?.artist}
+                </span>
+                <span className="font-medium text-white">
+                  {currentAlbum?.songs.length} songs
+                </span>
+                <span className="font-medium text-white">
+                  {currentAlbum?.releaseYear}
+                </span>
               </div>
             </div>
           </div>
@@ -84,7 +90,9 @@ const AlbumPage = () => {
                         {isCurrentSong ? (
                           <div className="size-4 text-green-500">♫</div>
                         ) : (
-                          <span className="group-hover:hidden">{index + 1}</span>
+                          <span className="group-hover:hidden">
+                            {index + 1}
+                          </span>
                         )}
                         {!isCurrentSong && (
                           <Play className="h-4 w-4 hidden group-hover:block" />
@@ -92,9 +100,15 @@ const AlbumPage = () => {
                       </div>
 
                       <div className="flex items-center gap-3">
-                        <img src={song.imageUrl} alt={song.title} className="size-10" />
+                        <img
+                          src={song.imageUrl}
+                          alt={song.title}
+                          className="size-10"
+                        />
                         <div>
-                          <div className="font-medium text-white">{song.title}</div>
+                          <div className="font-medium text-white">
+                            {song.title}
+                          </div>
                           <div>{song.artist}</div>
                         </div>
                       </div>

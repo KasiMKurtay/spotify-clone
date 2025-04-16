@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/resizable"; // Resizable bileşenlerini import eder. Bu bileşenler, ekranın farklı bölümleri arasındaki boyutları değiştirmeyi sağlar.
 import { Outlet } from "react-router-dom"; // Outlet bileşeni, alt bileşenlerin yerini alır. React Router ile sayfa yönlendirmesi yapılacak alandır.
 import LeftSideBar from "./components/LeftSideBar"; // Sol taraftaki menü için kullanılan LeftSideBar bileşenini import eder.
+import FriendsActivity from "./components/FriendsActivity";
 
 const MainLayout = () => {
   const isMobile = false; // Mobil olup olmadığına karar veren bir değişken (şu an için false, yani mobil değil).
@@ -44,7 +45,7 @@ const MainLayout = () => {
           maxSize={25} // Sağ panelin boyutu %25'ten büyük olamaz.
           collapsedSize={0} // Sağ panelin kapanması durumunda boyutu sıfır olur.
         >
-          Friends Activity{" "}
+          <FriendsActivity />
           {/* Sağ tarafta arkadaş etkinlikleri kısmı yer alır. */}
         </ResizablePanel>
       </ResizablePanelGroup>
