@@ -4,11 +4,14 @@ import AuthCallbackPage from "./pages/auth-callback/AuthCallbackPage";
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 import MainLayout from "./layout/MainLayout";
 import ChatPage from "./pages/chat/ChatPage";
+import AlbumPage from "./pages/album/AlbumPage";
 
 const App = () => {
   return (
     <>
-      <Routes> {/* Sayfa yönlendirmeleri için Routes bileşenini kullanır */}
+      <Routes>
+        {" "}
+        {/* Sayfa yönlendirmeleri için Routes bileşenini kullanır */}
         <Route
           path="/sso-callback"
           element={
@@ -20,9 +23,14 @@ const App = () => {
         />
         <Route path="/auth-callback" element={<AuthCallbackPage />} />
         {/* /auth-callback URL'sine geldiğinde AuthCallbackPage bileşenini render eder */}
-        <Route element={<MainLayout />}> {/* Ana düzen (layout) bileşenini tanımlar */}
-          <Route path="/" element={<HomePage />} /> {/* Anasayfa (/path) için HomePage bileşenini render eder */}
-          <Route path="/chat" element={<ChatPage />} /> {/* /chat URL'si için chatPage bileşenini render eder */}
+        <Route element={<MainLayout />}>
+          {" "}
+          {/* Ana düzen (layout) bileşenini tanımlar */}
+          <Route path="/" element={<HomePage />} />{" "}
+          {/* Anasayfa (/path) için HomePage bileşenini render eder */}
+          <Route path="/chat" element={<ChatPage />} />{" "}
+          {/* /chat URL'si için chatPage bileşenini render eder */}
+          <Route path="/albums/:albumId" element={<AlbumPage />} />
         </Route>
       </Routes>
     </>

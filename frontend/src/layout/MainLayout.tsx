@@ -40,7 +40,7 @@ const MainLayout = () => {
         {/* Sağ taraf */}
         <ResizablePanel
           defaultSize={20} // Başlangıçta sağ panelin boyutu %20 olacak.
-          minSize={0} // Sağ panelin boyutu minimum sıfır olabilir.
+          minSize={isMobile ? 0 : 10} // Sağ panelin boyutu minimum sıfır olabilir.
           maxSize={25} // Sağ panelin boyutu %25'ten büyük olamaz.
           collapsedSize={0} // Sağ panelin kapanması durumunda boyutu sıfır olur.
         >

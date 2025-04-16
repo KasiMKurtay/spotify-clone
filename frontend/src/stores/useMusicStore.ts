@@ -8,7 +8,10 @@ interface MusicStore {
   albums: Album[]; //Albümlerin tutulacağı dizi
   isLoading: boolean; //Verilerin yüklenip yüklenmediğini belirten boolean değeri
   error: string | null; //Hata mesajı veya null
+  currentAlbum: null | Album;
+
   fetchAlbums: () => Promise<void>; //Albümleri yükleme fonksiyonu
+  fetchAlbumById: (id: string) => Promise<void>;
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
@@ -17,7 +20,7 @@ export const useMusicStore = create<MusicStore>((set) => ({
   songs: [], // Başlangıçta boş şarkı dizisi.
   isLoading: false, // Başlangıçta yükleniyor durumu false.
   error: null, // Başlangıçta hata mesajı yok.
-
+  currentAlbum: null,
   fetchAlbums: async () => {
     //Albümleri fetch eden asenkron fonksiyon
     set({ isLoading: true, error: null }); // Yükleniyor durumu true olacak.
@@ -28,6 +31,18 @@ export const useMusicStore = create<MusicStore>((set) => ({
       set({ error: error.response.data.message }); //Hata mesajını store'a ekler
     } finally {
       set({ isLoading: false }); //Yükleniyor durumu false yapar
+    }
+  },
+
+  fetchAlbumById: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await AxiosInstance.get(`/albums/${id}`);
+      set({ currentAlbum: response.data });
+    } catch (error: any) {
+      set({ error: error.response.data.message });
+    } finally {
+      set({ isLoading: false });
     }
   },
 }));

@@ -19,7 +19,7 @@ export const getAlbumById = async (req, res, next) => {
     if (!album) {
       return res.status(404).json({ message: "Album not found" }); //Albüm bulunamazsa hata mesajı döndürür
     }
-    res.stauts(200).json(album); //Albümü JSON formatında döndürür
+    res.status(200).json(album); //Albümü JSON formatında döndürür
   } catch (error) {
     next(error); //Hata durumunda bir sonraki middleware'ye gecirir
     console.log("Error in getAlbumById", error); //Hata mesajını konsola yazdırır
