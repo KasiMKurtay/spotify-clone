@@ -2,46 +2,55 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import { Outlet } from "react-router-dom";
-import LeftSideBar from "./components/LeftSideBar";
+} from "@/components/ui/resizable"; // Resizable bileşenlerini import eder. Bu bileşenler, ekranın farklı bölümleri arasındaki boyutları değiştirmeyi sağlar.
+import { Outlet } from "react-router-dom"; // Outlet bileşeni, alt bileşenlerin yerini alır. React Router ile sayfa yönlendirmesi yapılacak alandır.
+import LeftSideBar from "./components/LeftSideBar"; // Sol taraftaki menü için kullanılan LeftSideBar bileşenini import eder.
 
 const MainLayout = () => {
-  const isMobile = false;
+  const isMobile = false; // Mobil olup olmadığına karar veren bir değişken (şu an için false, yani mobil değil).
   return (
     <div className="h-screen bg-black text-white flex flex-col">
+      {/* Ana konteyner. Yükseklik tüm ekranı kaplar. Arka plan siyah, yazılar beyaz. Flexbox düzeni kullanılır. */}
+
       <ResizablePanelGroup
-        direction="horizontal"
+        direction="horizontal" // Panellerin yatay olarak sıralanmasını sağlar.
         className="flex-1 flex h-full overflow-hidden p-2"
       >
         {/* Sol taraf */}
         <ResizablePanel
-          defaultSize={20}
-          minSize={isMobile ? 0 : 10}
-          maxSize={20}
+          defaultSize={20} // Başlangıçta sol panelin boyutu %20 olacak.
+          minSize={isMobile ? 0 : 10} // Mobilde minimum 0, diğer durumlarda 10 px olarak ayarlanır.
+          maxSize={20} // Panelin boyutu %20'yi geçemez.
         >
-          <LeftSideBar />
+          <LeftSideBar /> {/* Sol tarafta menü içeriklerini yerleştirir. */}
         </ResizablePanel>
+
         <ResizableHandle className="w-2 bg-black rounded-lg transition-colors" />
+        {/* Panel boyutlandırıcı, yatayda sol ve sağ panelleri ayarlamaya olanak tanır. */}
 
         {/* Orta taraf */}
         <ResizablePanel defaultSize={isMobile ? 80 : 60}>
-          <Outlet />
+          <Outlet />{" "}
+          {/* Yönlendirilmiş içeriği burada göstermek için Outlet kullanılır. */}
         </ResizablePanel>
-        <ResizableHandle className="w-2 bg-black rounded-lg transition-color" />
 
-        {/* Sag taraf */}
+        <ResizableHandle className="w-2 bg-black rounded-lg transition-color" />
+        {/* Orta ve sağ panelleri ayarlamak için bir başka boyutlandırıcı. */}
+
+        {/* Sağ taraf */}
         <ResizablePanel
-          defaultSize={20}
-          minSize={0}
-          maxSize={25}
-          collapsedSize={0}
+          defaultSize={20} // Başlangıçta sağ panelin boyutu %20 olacak.
+          minSize={0} // Sağ panelin boyutu minimum sıfır olabilir.
+          maxSize={25} // Sağ panelin boyutu %25'ten büyük olamaz.
+          collapsedSize={0} // Sağ panelin kapanması durumunda boyutu sıfır olur.
         >
-          Friends Activity
+          Friends Activity{" "}
+          {/* Sağ tarafta arkadaş etkinlikleri kısmı yer alır. */}
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
   );
 };
 
-export default MainLayout;
+export default MainLayout; // MainLayout bileşenini dışa aktarır.
+/*  */

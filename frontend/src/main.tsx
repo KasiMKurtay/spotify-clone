@@ -16,8 +16,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
       <AuthProvider>
+        {" "}
+        {/* AuthProvider ile kimlik doğrulama durumunu yönetir */}
         <BrowserRouter>
-          <App />
+          {" "}
+          {/* Uygulama için router'ı sağlar , sayfa yönlendirmelerini yönetir */}
+          <App /> {/* App bileşenini render eder */}
         </BrowserRouter>
       </AuthProvider>
     </ClerkProvider>

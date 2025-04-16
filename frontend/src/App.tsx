@@ -8,19 +8,21 @@ import ChatPage from "./pages/chat/ChatPage";
 const App = () => {
   return (
     <>
-      <Routes>
+      <Routes> {/* Sayfa yönlendirmeleri için Routes bileşenini kullanır */}
         <Route
           path="/sso-callback"
           element={
             <AuthenticateWithRedirectCallback
               signInForceRedirectUrl={"/auth-callback"}
             />
+            /* /sso-callback URL'sine geldiğinde AuthenticateWithRedirectCallback bileşenini render eder */
           }
         />
         <Route path="/auth-callback" element={<AuthCallbackPage />} />
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/chat" element={<ChatPage />} />
+        {/* /auth-callback URL'sine geldiğinde AuthCallbackPage bileşenini render eder */}
+        <Route element={<MainLayout />}> {/* Ana düzen (layout) bileşenini tanımlar */}
+          <Route path="/" element={<HomePage />} /> {/* Anasayfa (/path) için HomePage bileşenini render eder */}
+          <Route path="/chat" element={<ChatPage />} /> {/* /chat URL'si için chatPage bileşenini render eder */}
         </Route>
       </Routes>
     </>
