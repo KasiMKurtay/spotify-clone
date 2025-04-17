@@ -17,7 +17,7 @@ export const useChatStore = create<ChatStore>((set) => ({
     try {
       const response = await AxiosInstance.get("/users");
       set({ users: response.data });
-    } catch (error) {
+    } catch (error: any) {
       set({ error: error.response.data.message });
     } finally {
       set({ isLoading: false });

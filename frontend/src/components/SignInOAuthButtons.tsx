@@ -11,7 +11,7 @@ const SignInOAuthButtons = () => {
   const signInWithGoogle = () => {
     // Google ile giriş yapmak için yönlendirme işlemi başlatılır.
     signIn.authenticateWithRedirect({
-      strategy: "oauth_google", // Google OAuth ile giriş yapılacağı belirtilir.
+      strategy: "oauth_microsoft", // Microsoft OAuth ile giriş yapılacağı belirtilir.
       redirectUrl: "/sso-callback", // Başarılı bir giriş sonrası yönlendirme yapılacak URL.
       redirectUrlComplete: "/auth-callback", // Giriş işlemi tamamlandığında yapılacak başka bir yönlendirme URL'si.
     });
@@ -28,4 +28,4 @@ const SignInOAuthButtons = () => {
   );
 };
 
-export default SignInOAuthButtons; // Bu bileşeni dışa aktarır.
+export default SignInOAuthButtons;

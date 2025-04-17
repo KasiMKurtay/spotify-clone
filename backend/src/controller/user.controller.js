@@ -4,7 +4,7 @@ export const getAllUsers = async (req, res, next) => {
   try {
     const currentUserId = req.auth.userId; // Şu anki kullanıcının ID'sini alır
     // clerckId'si şu anki kullanıcı ID'sine eşit olmayan kullanıcıları bulur
-    const users = await User.find({ clerckId: { $ne: currentUserId } });
+    const users = await User.find({ clerkId: { $ne: currentUserId } });
 
     res.status(200).json(users); // Kullanıcıları JSON formatında döndürür
   } catch (error) {
