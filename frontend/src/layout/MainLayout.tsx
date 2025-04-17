@@ -6,6 +6,7 @@ import {
 import { Outlet } from "react-router-dom"; // Outlet bileşeni, alt bileşenlerin yerini alır. React Router ile sayfa yönlendirmesi yapılacak alandır.
 import LeftSideBar from "./components/LeftSideBar"; // Sol taraftaki menü için kullanılan LeftSideBar bileşenini import eder.
 import FriendsActivity from "./components/FriendsActivity";
+import AudioPlayer from "./components/AudioPlayer";
 
 const MainLayout = () => {
   const isMobile = false; // Mobil olup olmadığına karar veren bir değişken (şu an için false, yani mobil değil).
@@ -17,6 +18,7 @@ const MainLayout = () => {
         direction="horizontal" // Panellerin yatay olarak sıralanmasını sağlar.
         className="flex-1 flex h-full overflow-hidden p-2"
       >
+        <AudioPlayer />
         {/* Sol taraf */}
         <ResizablePanel
           defaultSize={20} // Başlangıçta sol panelin boyutu %20 olacak.
