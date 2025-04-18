@@ -1,54 +1,51 @@
-import { AxiosInstance } from "@/lib/axios";
-import { Album, Song } from "@/types";
-import { create } from "zustand";
+import { AxiosInstance } from "@/lib/axios"; // Axios ile API istekleri atmak için özel instance
+import { Album, Song } from "@/types"; // Tip tanımlamaları içe aktarılıyor
+import { create } from "zustand"; // Zustand store oluşturmak için gerekli fonksiyon
 
 interface MusicStore {
-  // MusicStore interface'ini tanımlar
-  songs: Song[]; //Şarkıların tutulacağı dizi
-  albums: Album[]; //Albümlerin tutulacağı dizi
-  isLoading: boolean; //Verilerin yüklenip yüklenmediğini belirten boolean değeri
-  error: string | null; //Hata mesajı veya null
-  currentAlbum: null | Album;
-  featuredSongs: Song[];
-  madeForYouSongs: Song[];
-  trendingSongs: Song[];
+  songs: Song[]; // Şarkıları tutan dizi
+  albums: Album[]; // Albümleri tutan dizi
+  isLoading: boolean; // Yüklenme durumu
+  error: string | null; // Hata mesajı ya da null
+  currentAlbum: null | Album; // Seçili albüm (detayları gösterilecek olan)
+  featuredSongs: Song[]; // Öne çıkan şarkılar
+  madeForYouSongs: Song[]; // Kullanıcıya özel şarkılar
+  trendingSongs: Song[]; // Trend olan şarkılar
 
-  fetchAlbums: () => Promise<void>; //Albümleri yükleme fonksiyonu
-  fetchAlbumById: (id: string) => Promise<void>;
-  fetchFeaturedSongs: () => Promise<void>;
-  fetchMadeForYouSongs: () => Promise<void>;
-  fetchTrendingSongs: () => Promise<void>;
+  fetchAlbums: () => Promise<void>; // Albüm listesini getiren fonksiyon
+  fetchAlbumById: (id: string) => Promise<void>; // Belirli bir albümü ID ile getiren fonksiyon
+  fetchFeaturedSongs: () => Promise<void>; // Öne çıkan şarkıları getiren fonksiyon
+  fetchMadeForYouSongs: () => Promise<void>; // Kullanıcıya özel şarkıları getiren fonksiyon
+  fetchTrendingSongs: () => Promise<void>; // Trend şarkıları getiren fonksiyon
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
-  // Zustand store'unu oluşturur.
-  albums: [], // Başlangıçta boş albüm dizisi.
-  songs: [], // Başlangıçta boş şarkı dizisi.
-  isLoading: false, // Başlangıçta yükleniyor durumu false.
-  error: null, // Başlangıçta hata mesajı yok.
-  currentAlbum: null,
-  madeForYouSongs: [],
-  featuredSongs: [],
-  trendingSongs: [],
+  albums: [], // Başlangıçta boş albüm listesi
+  songs: [], // Başlangıçta boş şarkı listesi
+  isLoading: false, // Yükleme işlemi başta false
+  error: null, // Hata mesajı başta yok
+  currentAlbum: null, // Seçili albüm yok
+  madeForYouSongs: [], // Başlangıçta boş kullanıcıya özel şarkı listesi
+  featuredSongs: [], // Başlangıçta boş öne çıkan şarkı listesi
+  trendingSongs: [], // Başlangıçta boş trend şarkı listesi
 
   fetchAlbums: async () => {
-    //Albümleri fetch eden asenkron fonksiyon
-    set({ isLoading: true, error: null }); // Yükleniyor durumu true olacak.
+    set({ isLoading: true, error: null }); // Yükleme başlatılır, hata sıfırlanır
     try {
-      const response = await AxiosInstance("/albums"); //albüms enpotinden albümleri çeker
-      set({ albums: response.data }); //Gelen verileri albümlere atar
+      const response = await AxiosInstance("/albums"); // Albüm listesini alır
+      set({ albums: response.data }); // Gelen albümler state'e aktarılır
     } catch (error: any) {
-      set({ error: error.response.data.message }); //Hata mesajını store'a ekler
+      set({ error: error.response.data.message }); // Hata olursa mesaj state'e yazılır
     } finally {
-      set({ isLoading: false }); //Yükleniyor durumu false yapar
+      set({ isLoading: false }); // Yükleme tamamlanır
     }
   },
 
   fetchAlbumById: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await AxiosInstance.get(`/albums/${id}`);
-      set({ currentAlbum: response.data });
+      const response = await AxiosInstance.get(`/albums/${id}`); // ID ile albüm detayını getirir
+      set({ currentAlbum: response.data }); // Albüm detayını state'e aktarır
     } catch (error: any) {
       set({ error: error.response.data.message });
     } finally {
@@ -59,9 +56,9 @@ export const useMusicStore = create<MusicStore>((set) => ({
   fetchFeaturedSongs: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await AxiosInstance.get("/songs/featured");
-      set({ featuredSongs: response.data });
-    } catch (error) {
+      const response = await AxiosInstance.get("/songs/featured"); // Öne çıkan şarkıları alır
+      set({ featuredSongs: response.data }); // State'e aktarılır
+    } catch (error: any) {
       set({ error: error.response.data.message });
     } finally {
       set({ isLoading: false });
@@ -71,18 +68,19 @@ export const useMusicStore = create<MusicStore>((set) => ({
   fetchMadeForYouSongs: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await AxiosInstance.get("/songs/made-for-you");
+      const response = await AxiosInstance.get("/songs/made-for-you"); // Kullanıcıya özel şarkılar
       set({ madeForYouSongs: response.data });
-    } catch (error) {
+    } catch (error: any) {
       set({ error: error.response.data.message });
     } finally {
       set({ isLoading: false });
     }
   },
+
   fetchTrendingSongs: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await AxiosInstance.get("/songs/trending");
+      const response = await AxiosInstance.get("/songs/trending"); // Trend şarkılar
       set({ trendingSongs: response.data });
     } catch (error: any) {
       set({ error: error.response.data.message });

@@ -6,6 +6,7 @@ import { Clock, Pause, Play } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+// Şarkı süresini dakika:saniye formatına dönüştürür
 export const formatDuration = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
@@ -13,16 +14,19 @@ export const formatDuration = (seconds: number) => {
 };
 
 const AlbumPage = () => {
-  const { albumId } = useParams();
-  const { fetchAlbumById, currentAlbum, isLoading } = useMusicStore();
-  const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
+  const { albumId } = useParams(); // URL'den albumId al
+  const { fetchAlbumById, currentAlbum, isLoading } = useMusicStore(); // Albüm verisi
+  const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore(); // Oynatma kontrolü
 
+  // Albüm sayfası açıldığında albüm verilerini getir
   useEffect(() => {
     if (albumId) fetchAlbumById(albumId);
   }, [fetchAlbumById, albumId]);
 
+  // Yükleniyorsa boş döner
   if (isLoading) return null;
 
+  // Albümü çal ya da durdur
   const handlePlayAlbum = () => {
     if (!currentAlbum) return;
 
@@ -35,6 +39,7 @@ const AlbumPage = () => {
     }
   };
 
+  // Belirli bir şarkıyı çal
   const handlePlaySong = (index: number) => {
     if (!currentAlbum) return;
 
@@ -44,23 +49,25 @@ const AlbumPage = () => {
   return (
     <div className="h-full">
       <ScrollArea className="h-full rounded-md">
-        {/* Main Content */}
+        {/* Arka plan gradient efekti */}
         <div className="relative min-h-full">
-          {/* bg gradient */}
           <div
             className="absolute inset-0 bg-gradient-to-b from-[#5038a0]/80 via-zinc-900/80
 					 to-zinc-900 pointer-events-none"
             aria-hidden="true"
           />
 
-          {/* Content */}
+          {/* Sayfa içeriği */}
           <div className="relative z-10">
             <div className="flex p-6 gap-6 pb-8">
+              {/* Albüm kapağı */}
               <img
                 src={currentAlbum?.imageUrl}
                 alt={currentAlbum?.title}
                 className="w-[240px] h-[240px] shadow-xl rounded"
               />
+
+              {/* Albüm bilgileri */}
               <div className="flex flex-col justify-end">
                 <p className="text-sm font-medium">Album</p>
                 <h1 className="text-7xl font-bold my-4">
@@ -76,7 +83,7 @@ const AlbumPage = () => {
               </div>
             </div>
 
-            {/* play button */}
+            {/* Albüm oynatma butonu */}
             <div className="px-6 pb-4 flex items-center gap-6">
               <Button
                 onClick={handlePlayAlbum}
@@ -95,9 +102,9 @@ const AlbumPage = () => {
               </Button>
             </div>
 
-            {/* Table Section */}
+            {/* Şarkı listesi tablosu */}
             <div className="bg-black/20 backdrop-blur-sm">
-              {/* table header */}
+              {/* Tablo başlıkları */}
               <div
                 className="grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-10 py-2 text-sm 
             text-zinc-400 border-b border-white/5"
@@ -110,8 +117,7 @@ const AlbumPage = () => {
                 </div>
               </div>
 
-              {/* songs list */}
-
+              {/* Şarkıların listesi */}
               <div className="px-6">
                 <div className="space-y-2 py-4">
                   {currentAlbum?.songs.map((song, index) => {
@@ -121,9 +127,9 @@ const AlbumPage = () => {
                         key={song._id}
                         onClick={() => handlePlaySong(index)}
                         className={`grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 text-sm 
-                      text-zinc-400 hover:bg-white/5 rounded-md group cursor-pointer
-                      `}
+                      text-zinc-400 hover:bg-white/5 rounded-md group cursor-pointer`}
                       >
+                        {/* Sol kısım: sıra numarası ya da oynatma simgesi */}
                         <div className="flex items-center justify-center">
                           {isCurrentSong && isPlaying ? (
                             <div className="size-4 text-green-500">♫</div>
@@ -137,13 +143,13 @@ const AlbumPage = () => {
                           )}
                         </div>
 
+                        {/* Şarkı adı ve sanatçı */}
                         <div className="flex items-center gap-3">
                           <img
                             src={song.imageUrl}
                             alt={song.title}
                             className="size-10"
                           />
-
                           <div>
                             <div className={`font-medium text-white`}>
                               {song.title}
@@ -151,9 +157,13 @@ const AlbumPage = () => {
                             <div>{song.artist}</div>
                           </div>
                         </div>
+
+                        {/* Şarkı eklenme tarihi */}
                         <div className="flex items-center">
                           {song.createdAt.split("T")[0]}
                         </div>
+
+                        {/* Şarkı süresi */}
                         <div className="flex items-center">
                           {formatDuration(song.duration)}
                         </div>
@@ -169,4 +179,5 @@ const AlbumPage = () => {
     </div>
   );
 };
+
 export default AlbumPage;
