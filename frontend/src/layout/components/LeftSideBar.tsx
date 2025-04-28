@@ -16,7 +16,6 @@ const LeftSideBar = () => {
     fetchAlbums(); //Albümleri çeker
   }, [fetchAlbums]); //fetchAlbums fonkiyonu değiştinde yeniden çalışır
 
-  console.log({ albums });
 
   return (
     <div className="h-full flex flex-col gap-2">

@@ -4,6 +4,7 @@ import { useMusicStore } from "@/stores/useMusicStore";
 import { useEffect } from "react";
 import FeaturedSection from "./components/FeaturedSection";
 import SectionGrid from "./components/SectionGrid";
+import { usePlayerStore } from "@/stores/usePlayerStore";
 
 const HomePage = () => {
   // Music store'dan şarkı verilerini almak için gerekli fonksiyonlar ve durumlar
@@ -17,6 +18,8 @@ const HomePage = () => {
     trendingSongs,
   } = useMusicStore();
 
+  const { initializeQueue } = usePlayerStore();
+
   // Bileşen ilk yüklendiğinde şarkıları çekmek için useEffect kullanımı
   useEffect(() => {
     // Şarkıları çekmek için gerekli fonksiyonları çağırıyoruz
@@ -25,13 +28,16 @@ const HomePage = () => {
     fetchMadeForYouSongs();
   }, [fetchFeaturedSongs, fetchTrendingSongs, fetchMadeForYouSongs]); // Bağımlılık dizisi, sadece bu fonksiyonlar değiştiğinde çalışır
 
-  // Konsolda şarkı verilerini kontrol etmek için loglama
-  console.log({
-    isLoading,
-    madeForYouSongs,
-    featuredSongs,
-    trendingSongs,
-  });
+  useEffect(() => {
+    if (
+      madeForYouSongs.length > 0 &&
+      featuredSongs.length > 0 &&
+      trendingSongs.length > 0
+    ) {
+      const allSongs = [...madeForYouSongs, ...featuredSongs, ...trendingSongs];
+      initializeQueue(allSongs);
+    }
+  }, [initializeQueue, madeForYouSongs, featuredSongs, trendingSongs]);
 
   return (
     <main className="rounded-lg overflow-hidden h-full bg-gradient-to-b from-zinc-800 to-zinc-900">

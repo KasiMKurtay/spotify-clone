@@ -88,4 +88,16 @@ export const useMusicStore = create<MusicStore>((set) => ({
       set({ isLoading: false });
     }
   },
+
+  fetchAllSongs: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await AxiosInstance.get("/songs");
+      set({ songs: response.data });
+    } catch (error: any) {
+      set({ error: error.response.data.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 }));

@@ -7,9 +7,20 @@ import { Outlet } from "react-router-dom"; // Outlet bileşeni, alt bileşenleri
 import LeftSideBar from "./components/LeftSideBar"; // Sol taraftaki menü için kullanılan LeftSideBar bileşenini import eder.
 import FriendsActivity from "./components/FriendsActivity";
 import AudioPlayer from "./components/AudioPlayer";
+import { PlaybackControls } from "./components/PlayBackControls";
+import { useEffect, useState } from "react";
 
 const MainLayout = () => {
-  const isMobile = false; // Mobil olup olmadığına karar veren bir değişken (şu an için false, yani mobil değil).
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   return (
     <div className="h-screen bg-black text-white flex flex-col">
       {/* Ana konteyner. Yükseklik tüm ekranı kaplar. Arka plan siyah, yazılar beyaz. Flexbox düzeni kullanılır. */}
@@ -37,20 +48,26 @@ const MainLayout = () => {
           {/* Yönlendirilmiş içeriği burada göstermek için Outlet kullanılır. */}
         </ResizablePanel>
 
-        <ResizableHandle className="w-2 bg-black rounded-lg transition-color" />
-        {/* Orta ve sağ panelleri ayarlamak için bir başka boyutlandırıcı. */}
+        {!isMobile && (
+          <>
+            <ResizableHandle className="w-2 bg-black rounded-lg transition-color" />
+            {/* Orta ve sağ panelleri ayarlamak için bir başka boyutlandırıcı. */}
 
-        {/* Sağ taraf */}
-        <ResizablePanel
-          defaultSize={20} // Başlangıçta sağ panelin boyutu %20 olacak.
-          minSize={isMobile ? 0 : 10} // Sağ panelin boyutu minimum sıfır olabilir.
-          maxSize={25} // Sağ panelin boyutu %25'ten büyük olamaz.
-          collapsedSize={0} // Sağ panelin kapanması durumunda boyutu sıfır olur.
-        >
-          <FriendsActivity />
-          {/* Sağ tarafta arkadaş etkinlikleri kısmı yer alır. */}
-        </ResizablePanel>
+            {/* Sağ taraf */}
+            <ResizablePanel
+              defaultSize={20} // Başlangıçta sağ panelin boyutu %20 olacak.
+              minSize={isMobile ? 0 : 10} // Sağ panelin boyutu minimum sıfır olabilir.
+              maxSize={25} // Sağ panelin boyutu %25'ten büyük olamaz.
+              collapsedSize={0} // Sağ panelin kapanması durumunda boyutu sıfır olur.
+            >
+              <FriendsActivity />
+              {/* Sağ tarafta arkadaş etkinlikleri kısmı yer alır. */}
+            </ResizablePanel>
+          </>
+        )}
       </ResizablePanelGroup>
+
+      <PlaybackControls />
     </div>
   );
 };

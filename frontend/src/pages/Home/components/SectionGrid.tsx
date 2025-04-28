@@ -2,6 +2,7 @@ import { Song } from "@/types";
 import { Button } from "@/components/ui/button";
 import SectionGridSkeleton from "@/components/skeletons/SectionGridSkeleton";
 import PlayButton from "./PlayButton";
+import { Link } from "react-router-dom";
 
 // Bileşenin props'ları: başlık, şarkı listesi ve yüklenme durumu
 type SectionGridProps = {
@@ -9,6 +10,7 @@ type SectionGridProps = {
   songs: Song[];
   isLoading: boolean;
 };
+
 
 const SectionGrid = ({ songs, title, isLoading }: SectionGridProps) => {
   // Yüklenme durumundaysa iskelet bileşenini göster
@@ -23,7 +25,8 @@ const SectionGrid = ({ songs, title, isLoading }: SectionGridProps) => {
           variant="link"
           className="text-sm text-zinc-400 hover:text-white"
         >
-          Show all
+          {/* Link bileşenini sadece yazıya sar */}
+          <Link to="/ShowAllSongs">Show All Songs</Link>
         </Button>
       </div>
 
