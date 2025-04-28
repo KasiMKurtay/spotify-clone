@@ -23,7 +23,7 @@ const SignInOAuthButtons = () => {
       variant={"secondary"} // Butonun ikinci renk seçeneğiyle render edilmesini sağlar.
       className="w-full text-white border-zinc-200 h-11" // Tailwind CSS ile buton stilini belirler.
     >
-      Continue with Google {/* Buton içeriği */}
+      Continue with Hotmail {/* Buton içeriği */}
     </Button>
   );
 };

@@ -1,5 +1,6 @@
 import FeaturedGridSkeleton from "@/components/skeletons/FeaturedGridSkeleton";
 import { useMusicStore } from "@/stores/useMusicStore";
+import PlayButton from "./PlayButton";
 
 const FeaturedSection = () => {
   // Global store'dan öne çıkan şarkıları, yüklenme durumunu ve hatayı alıyoruz
@@ -35,6 +36,7 @@ const FeaturedSection = () => {
             {/* Sanatçı adı */}
             <p className="text-sm text-zinc-400 truncate">{song.artist}</p>
           </div>
+          <PlayButton song={song} />
         </div>
       ))}
     </div>

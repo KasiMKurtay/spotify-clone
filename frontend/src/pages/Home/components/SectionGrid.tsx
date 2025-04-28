@@ -1,6 +1,7 @@
 import { Song } from "@/types";
 import { Button } from "@/components/ui/button";
 import SectionGridSkeleton from "@/components/skeletons/SectionGridSkeleton";
+import PlayButton from "./PlayButton";
 
 // Bileşenin props'ları: başlık, şarkı listesi ve yüklenme durumu
 type SectionGridProps = {
@@ -43,6 +44,7 @@ const SectionGrid = ({ songs, title, isLoading }: SectionGridProps) => {
 									group-hover:scale-105"
                 />
               </div>
+              <PlayButton song={song} />
             </div>
 
             {/* Şarkı başlığı */}
