@@ -20,3 +20,10 @@ export interface Album {
   releaseYear: number; // Albümün çıkış yılı (number türünde).
   songs: Song[]; // Albümdeki şarkılar (Song türünde bir dizi).
 }
+
+export interface Stats {
+  totalSongs: number;
+  totalAlbums: number;
+  totalUsers: number;
+  totalArtists: number;
+}

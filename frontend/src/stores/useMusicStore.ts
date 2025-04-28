@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosInstance } from "@/lib/axios"; // Axios ile API istekleri atmak için özel instance
-import { Album, Song } from "@/types"; // Tip tanımlamaları içe aktarılıyor
+import { Album, Song, Stats } from "@/types"; // Tip tanımlamaları içe aktarılıyor
 import { create } from "zustand"; // Zustand store oluşturmak için gerekli fonksiyon
 
 interface MusicStore {
@@ -11,12 +12,15 @@ interface MusicStore {
   featuredSongs: Song[]; // Öne çıkan şarkılar
   madeForYouSongs: Song[]; // Kullanıcıya özel şarkılar
   trendingSongs: Song[]; // Trend olan şarkılar
+  stats: Stats;
 
   fetchAlbums: () => Promise<void>; // Albüm listesini getiren fonksiyon
   fetchAlbumById: (id: string) => Promise<void>; // Belirli bir albümü ID ile getiren fonksiyon
   fetchFeaturedSongs: () => Promise<void>; // Öne çıkan şarkıları getiren fonksiyon
   fetchMadeForYouSongs: () => Promise<void>; // Kullanıcıya özel şarkıları getiren fonksiyon
   fetchTrendingSongs: () => Promise<void>; // Trend şarkıları getiren fonksiyon
+  fetchStats: () => Promise<void>; // Tüm istatistikleri getiren fonksiyon
+  fetchAllSongs: () => Promise<void>;
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
@@ -28,6 +32,12 @@ export const useMusicStore = create<MusicStore>((set) => ({
   madeForYouSongs: [], // Başlangıçta boş kullanıcıya özel şarkı listesi
   featuredSongs: [], // Başlangıçta boş öne çıkan şarkı listesi
   trendingSongs: [], // Başlangıçta boş trend şarkı listesi
+  stats: {
+    totalAlbums: 0,
+    totalArtists: 0,
+    totalSongs: 0,
+    totalUsers: 0,
+  },
 
   fetchAlbums: async () => {
     set({ isLoading: true, error: null }); // Yükleme başlatılır, hata sıfırlanır
@@ -94,6 +104,18 @@ export const useMusicStore = create<MusicStore>((set) => ({
     try {
       const response = await AxiosInstance.get("/songs");
       set({ songs: response.data });
+    } catch (error: any) {
+      set({ error: error.response.data.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  fetchStats: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await AxiosInstance.get("/stats");
+      set({ stats: response.data });
     } catch (error: any) {
       set({ error: error.response.data.message });
     } finally {

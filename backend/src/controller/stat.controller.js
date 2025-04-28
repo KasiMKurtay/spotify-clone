@@ -1,47 +1,52 @@
+import { Album } from "../models/album.model.js";
 import { Song } from "../models/song.model.js";
 import { User } from "../models/user.model.js";
-import { Album } from "../models/album.model.js";
-// Tüm istatistikleri almak için kullanılan fonksiyon
+
+// İstatistik verilerini almak için kullanılan fonksiyon
 export const getStats = async (req, res, next) => {
   try {
-    // Promise.all ile tüm istatistikleri aynı anda almak için paralel istekler yapılır
-    const [totalSongs, totalAlbums, totalUsers, uniqueArtist] =
+    // Promise.all ile paralel olarak tüm veriler alınıyor
+    const [totalSongs, totalAlbums, totalUsers, uniqueArtists] =
       await Promise.all([
-        // Tüm veriler paralel olarak alınır
-        Song.countDocuments(), // Şarkı sayısını alır
-        Album.countDocuments(), // Albüm sayısını alır
-        User.countDocuments(), // Kullanıcı sayısını alır
+        // Song koleksiyonundaki toplam şarkı sayısı
+        Song.countDocuments(),
 
-        // Song ve Album koleksiyonlarından benzersiz sanatçı sayısını alır
+        // Album koleksiyonundaki toplam albüm sayısı
+        Album.countDocuments(),
+
+        // User koleksiyonundaki toplam kullanıcı sayısı
+        User.countDocuments(),
+
+        // Song koleksiyonunda sanatçıları gruplayıp toplam sanatçı sayısını almak için aggregation işlemi
         Song.aggregate([
-          // Song koleksiyonunda aggregation işlemi yapılır
           {
             $unionWith: {
-              // Song ve Album koleksiyonlarını birleştirir
-              coll: "albums", // Album koleksiyonunu kullanır
-              pipeline: [], // Herhangi bir ek işlem yapılmaz
+              // Song ve Album koleksiyonlarını birleştiriyor
+              coll: "albums", // Album koleksiyonunu kullanıyoruz
+              pipeline: [], // Albüm koleksiyonunda herhangi bir işlem yapılmaz
             },
           },
           {
             $group: {
-              // Veriyi gruplar
-              _id: "artist", // Sanatçıyı gruplar
+              // Song koleksiyonundaki sanatçılar gruplanır
+              _id: "$artist", // Sanatçılar `_id` alanında gruplanır
             },
           },
           {
-            $count: "count", // Sanatçıların toplam sayısını alır
+            $count: "count", // Sanatçılar gruplandıktan sonra toplam sayısı alınır
           },
         ]),
       ]);
 
-    // İstatistikleri JSON formatında döndürür
+    // Sonuçları JSON formatında döndür
     res.status(200).json({
-      totalSongs, // Toplam şarkı sayısını döndürür
       totalAlbums, // Toplam albüm sayısını döndürür
+      totalSongs, // Toplam şarkı sayısını döndürür
       totalUsers, // Toplam kullanıcı sayısını döndürür
-      totalArtist: uniqueArtist[0]?.count || 0, // Benzersiz sanatçı sayısını döndürür, yoksa 0 döner
+      totalArtists: uniqueArtists[0]?.count || 0, // Benzersiz sanatçı sayısını döndürür, yoksa 0 döner
     });
   } catch (error) {
-    next(error); // Hata durumunda bir sonraki middleware'e geçer
+    // Hata durumunda bir sonraki middleware'e geçer
+    next(error);
   }
 };
