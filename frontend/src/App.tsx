@@ -8,6 +8,8 @@ import AlbumPage from "./pages/album/AlbumPage";
 import ShowAllSongs from "./pages/Home/components/ShowAllSongs";
 import AdminPage from "./pages/admin/AdminPage";
 
+import { Toaster } from "react-hot-toast";
+
 const App = () => {
   return (
     <>
@@ -36,6 +38,7 @@ const App = () => {
           <Route path="/ShowAllSongs" element={<ShowAllSongs />} />
         </Route>
       </Routes>
+      <Toaster />
     </>
   );
 };

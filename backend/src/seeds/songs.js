@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+console.log("MONGODB_URI", process.env.MONGODB_URI);
 import { Song } from "../models/song.model.js";
 import { config } from "dotenv";
 

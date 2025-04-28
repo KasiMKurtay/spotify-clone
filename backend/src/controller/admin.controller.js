@@ -1,14 +1,14 @@
 import { Song } from "../models/song.model.js";
 import { Album } from "../models/album.model.js";
-
+import cloudinary from "../lib/cloudinary.js";
 const uploadToCloudinary = async (file) => {
   try {
-    const result = await uploadToCloudinary.uploader.upload(file.tempFilePath, {
+    const result = await cloudinary.uploader.upload(file.tempFilePath, {
       resource_type: "auto", //Dosya türünü otomatik olarak belirler
     });
     return result.secure_url; //Yükleme başarılıysa, dosyanın güvenli URL'sini döndürür
   } catch (error) {
-    console.log("Error in uploadtToCloudinary", error); //Hata mesajını konsola yazdırır
+    console.log("Error in uploadToCloudinary", error); //Hata mesajını konsola yazdırır
     throw new Error("Error uploading to cloudinary"); //Hata mesajını bir sonraki middleware'a gönderir
   }
 };

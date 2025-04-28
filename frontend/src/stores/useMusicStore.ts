@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosInstance } from "@/lib/axios"; // Axios ile API istekleri atmak için özel instance
 import { Album, Song, Stats } from "@/types"; // Tip tanımlamaları içe aktarılıyor
+import toast from "react-hot-toast";
 import { create } from "zustand"; // Zustand store oluşturmak için gerekli fonksiyon
 
 interface MusicStore {
@@ -21,6 +22,8 @@ interface MusicStore {
   fetchTrendingSongs: () => Promise<void>; // Trend şarkıları getiren fonksiyon
   fetchStats: () => Promise<void>; // Tüm istatistikleri getiren fonksiyon
   fetchAllSongs: () => Promise<void>;
+  deleteSong: (id: string) => Promise<void>;
+  deleteAlbum: (id: string) => Promise<void>;
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
@@ -39,6 +42,25 @@ export const useMusicStore = create<MusicStore>((set) => ({
     totalUsers: 0,
   },
 
+  deleteAlbum: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      await AxiosInstance.delete(`/admin/albums/${id}`);
+      set((state) => ({
+        albums: state.albums.filter((album) => album._id !== id),
+        songs: state.songs.map((song) =>
+          song.albumId === state.albums.find((a) => a._id === id)?._id
+            ? { ...song, albumId: null }
+            : song
+        ),
+      }));
+    } catch (error: any) {
+      set({ error: error.response.data.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+  
   fetchAlbums: async () => {
     set({ isLoading: true, error: null }); // Yükleme başlatılır, hata sıfırlanır
     try {
@@ -122,4 +144,20 @@ export const useMusicStore = create<MusicStore>((set) => ({
       set({ isLoading: false });
     }
   },
+
+  deleteSong: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      await AxiosInstance.delete(`/admin/songs/${id}`);
+      set((state) => ({
+        songs: state.songs.filter((song) => song._id !== id),
+      }));
+      toast.success("Song deleted successfully");
+    } catch (error: any) {
+      set({ error: error.response.data.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 }));
+
