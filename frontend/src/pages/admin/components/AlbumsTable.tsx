@@ -14,7 +14,6 @@ import { useEffect } from "react";
 const AlbumsTable = () => {
   const { albums, deleteAlbum, fetchAlbums } = useMusicStore();
 
-  console.log(deleteAlbum);
 
   useEffect(() => {
     fetchAlbums();

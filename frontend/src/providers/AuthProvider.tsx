@@ -3,21 +3,23 @@ import { useAuth } from "@clerk/clerk-react"; // Clerk kütüphanesinden auth ve
 import { useEffect, useState } from "react"; // React Hook'larını içeri aktar
 import { Loader } from "lucide-react"; // Yüklenme spinner ikonu
 import { useAuthStore } from "@/stores/useAuthStore"; // Yetkilendirme kontrolü için store
+import { useChatStore } from "@/stores/useChatStore";
 
 // Token varsa Axios'a Authorization header olarak ekle, yoksa sil
 const updateApiToken = (token: string | null) => {
   if (token) {
-    AxiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    AxiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`; // Token'i Axios'a ekle
   } else {
-    delete AxiosInstance.defaults.headers.common["Authorization"];
+    delete AxiosInstance.defaults.headers.common["Authorization"]; // Token yoksa sil
   }
 };
 
 // AuthProvider bileşeni (uygulamanın auth durumunu yönetiyor)
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { getToken } = useAuth(); // Clerk'ten token al
+  const { getToken, userId } = useAuth(); // Clerk'ten token al
   const [loading, setLoading] = useState(true); // Sayfa yükleniyor mu?
   const { checkAdmin } = useAuthStore(); // Kullanıcı admin mi kontrol et
+  const { initSocket, disconnectSocket } = useChatStore();
 
   useEffect(() => {
     const initAuth = async () => {
@@ -27,6 +29,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         if (token) {
           await checkAdmin(); // Token varsa admin kontrolü yap
+          if (userId) initSocket(userId);
         }
       } catch (error) {
         updateApiToken(null); // Hata varsa token'i sıfırla
@@ -37,7 +40,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     initAuth(); // useEffect çalışınca auth başlat
-  }, [getToken]); // Sadece getToken değişirse tekrar çalışır
+
+    return () => disconnectSocket();
+  }, [getToken, userId, checkAdmin, initSocket, disconnectSocket]); // Sadece belirtilen veriler değişirse çalışır
 
   if (loading)
     return (

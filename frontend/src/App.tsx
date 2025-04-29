@@ -14,7 +14,6 @@ const App = () => {
   return (
     <>
       <Routes>
-        {" "}
         {/* Sayfa yönlendirmeleri için Routes bileşenini kullanır */}
         <Route
           path="/sso-callback"
@@ -30,9 +29,9 @@ const App = () => {
         <Route path="/admin" element={<AdminPage />} />
         <Route element={<MainLayout />}>
           {/* Ana düzen (layout) bileşenini tanımlar */}
-          <Route path="/" element={<HomePage />} />{" "}
+          <Route path="/" element={<HomePage />} />
           {/* Anasayfa (/path) için HomePage bileşenini render eder */}
-          <Route path="/chat" element={<ChatPage />} />{" "}
+          <Route path="/chat" element={<ChatPage />} />
           {/* /chat URL'si için chatPage bileşenini render eder */}
           <Route path="/albums/:albumId" element={<AlbumPage />} />
           <Route path="/ShowAllSongs" element={<ShowAllSongs />} />
