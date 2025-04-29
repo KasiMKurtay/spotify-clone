@@ -49,18 +49,19 @@ export const useMusicStore = create<MusicStore>((set) => ({
       set((state) => ({
         albums: state.albums.filter((album) => album._id !== id),
         songs: state.songs.map((song) =>
-          song.albumId === state.albums.find((a) => a._id === id)?._id
-            ? { ...song, albumId: null }
+          song.albumId === state.albums.find((a) => a._id === id)?.title
+            ? { ...song, album: null }
             : song
         ),
       }));
+      toast.success("Album deleted successfully");
     } catch (error: any) {
-      set({ error: error.response.data.message });
+      toast.error("Failed to delete album: " + error.message);
     } finally {
       set({ isLoading: false });
     }
   },
-  
+
   fetchAlbums: async () => {
     set({ isLoading: true, error: null }); // Yükleme başlatılır, hata sıfırlanır
     try {
@@ -160,4 +161,3 @@ export const useMusicStore = create<MusicStore>((set) => ({
     }
   },
 }));
-

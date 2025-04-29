@@ -81,7 +81,8 @@ export const createAlbum = async (req, res, next) => {
     const { title, artist, releaseYear } = req.body; //Albüm bilgilerini al
     const imageFile = req.files; //Resim dosyasını al
 
-    const imageUrl = await uploadToCloudinary(imageFile); //Resim dosyasını Cloudinary'e yükle
+    const imageUrl = await uploadToCloudinary(imageFile);
+    //Resim dosyasını Cloudinary'e yükle
 
     //Albüm veritabanına kaydedilir
     const album = new Album({

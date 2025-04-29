@@ -20,6 +20,6 @@ router.delete("/songs/:id", deleteSong); //Belirli bir şarkıyı silmek için D
 
 router.post("/albums", createAlbum); //Yeni bir albüm oluşturmak için POST endpoint
 
-router.delete("/albums", deleteAlbum); //Belirli bir albümü silmek için DELETE endpoint
+router.delete("/albums/:id", deleteAlbum); //Belirli bir albümü silmek için DELETE endpoint
 
 export default router;
