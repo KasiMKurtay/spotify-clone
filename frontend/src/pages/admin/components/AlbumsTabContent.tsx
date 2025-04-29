@@ -12,20 +12,29 @@ import AddAlbumDialog from "./AddAlbumDialog";
 const AlbumsTabContent = () => {
   return (
     <Card className="bg-zinc-800/50 border-zinc-700/50">
+      {" "}
+      {/* Card bileşeni, şık bir görünüm için kullanılıyor */}
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <Library className="size-5 text-violet-500" />
+              {" "}
+              {/* Başlık, albüm kütüphanesini tanımlar */}
+              <Library className="size-5 text-violet-500" />{" "}
+              {/* Kütüphane simgesi */}
               Album Library
             </CardTitle>
-            <CardDescription>Manage your album collection</CardDescription>
+            <CardDescription>
+              {" "}
+              {/* Açıklama, albüm koleksiyonunu yönetmek için */}
+              Manage your album collection
+            </CardDescription>
           </div>
-          <AddAlbumDialog />
+          <AddAlbumDialog /> {/* Albüm eklemek için bir dialog bileşeni */}
         </div>
       </CardHeader>
       <CardContent>
-        <AlbumsTable />
+        <AlbumsTable /> {/* Albüm verilerini gösteren tablo */}
       </CardContent>
     </Card>
   );

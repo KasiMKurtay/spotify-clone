@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { usePlayerStore } from "@/stores/usePlayerStore";
+import { Button } from "@/components/ui/button"; 
+import { Slider } from "@/components/ui/slider"; 
+import { usePlayerStore } from "@/stores/usePlayerStore"; 
 import {
   Laptop2,
   ListMusic,
@@ -12,10 +12,11 @@ import {
   SkipBack,
   SkipForward,
   Volume1,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+} from "lucide-react"; 
+import { useEffect, useRef, useState } from "react"; // 
 
 const formatTime = (seconds: number) => {
+  // Saniyeyi dakika:saniye formatına çevirir
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = Math.floor(seconds % 60);
   return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
@@ -23,48 +24,48 @@ const formatTime = (seconds: number) => {
 
 export const PlaybackControls = () => {
   const { currentSong, isPlaying, togglePlay, playNext, playPrevious } =
-    usePlayerStore();
+    usePlayerStore(); // Store'dan gerekli çalar durumlarını alır
 
-  const [volume, setVolume] = useState(75);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [volume, setVolume] = useState(75); // Ses düzeyini tutar (0–100)
+  const [currentTime, setCurrentTime] = useState(0); // Şarkının geçerli süresini tutar
+  const [duration, setDuration] = useState(0); // Şarkının toplam süresini tutar
+  const audioRef = useRef<HTMLAudioElement | null>(null); // <audio> öğesine referans tutar
 
   useEffect(() => {
-    audioRef.current = document.querySelector("audio");
-
+    audioRef.current = document.querySelector("audio"); // DOM'dan <audio> öğesini alır
     const audio = audioRef.current;
     if (!audio) return;
 
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
+    const updateTime = () => setCurrentTime(audio.currentTime); // Geçerli süreyi günceller
+    const updateDuration = () => setDuration(audio.duration); // Toplam süreyi günceller
 
-    audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("timeupdate", updateTime); // Zaman ilerledikçe süreyi günceller
+    audio.addEventListener("loadedmetadata", updateDuration); // Metadata yüklendiğinde süresini alır
 
     const handleEnded = () => {
-      usePlayerStore.setState({ isPlaying: false });
+      usePlayerStore.setState({ isPlaying: false }); // Şarkı bittiğinde çalmayı durdurur
     };
 
-    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("ended", handleEnded); // Şarkı sonlandığında çalışır
 
     return () => {
+      // Temizleme: Event listener'ları kaldırır
       audio.removeEventListener("timeupdate", updateTime);
       audio.removeEventListener("loadedmetadata", updateDuration);
       audio.removeEventListener("ended", handleEnded);
     };
-  }, [currentSong]);
+  }, [currentSong]); // currentSong değiştiğinde tekrar çalışır
 
   const handleSeek = (value: number[]) => {
     if (audioRef.current) {
-      audioRef.current.currentTime = value[0];
+      audioRef.current.currentTime = value[0]; // Slider ile şarkı içinde gezinmeyi sağlar
     }
   };
 
   return (
     <footer className="h-20 sm:h-24 bg-zinc-900 border-t border-zinc-800 px-4">
       <div className="flex justify-between items-center h-full max-w-[1800px] mx-auto">
-        {/* currently playing song */}
+        {/* Şu anda çalan şarkı bilgileri */}
         <div className="hidden sm:flex items-center gap-4 min-w-[180px] w-[30%]">
           {currentSong && (
             <>
@@ -85,7 +86,7 @@ export const PlaybackControls = () => {
           )}
         </div>
 
-        {/* player controls*/}
+        {/* Oynatma kontrolleri */}
         <div className="flex flex-col items-center gap-2 flex-1 max-w-full sm:max-w-[45%]">
           <div className="flex items-center gap-4 sm:gap-6">
             <Button
@@ -93,7 +94,7 @@ export const PlaybackControls = () => {
               variant="ghost"
               className="hidden sm:inline-flex hover:text-white text-zinc-400"
             >
-              <Shuffle className="h-4 w-4" />
+              <Shuffle className="h-4 w-4" /> {/* Karışık çalma butonu */}
             </Button>
 
             <Button
@@ -103,7 +104,7 @@ export const PlaybackControls = () => {
               onClick={playPrevious}
               disabled={!currentSong}
             >
-              <SkipBack className="h-4 w-4" />
+              <SkipBack className="h-4 w-4" /> {/* Önceki şarkıya geç */}
             </Button>
 
             <Button
@@ -113,11 +114,12 @@ export const PlaybackControls = () => {
               disabled={!currentSong}
             >
               {isPlaying ? (
-                <Pause className="h-5 w-5" />
+                <Pause className="h-5 w-5" /> // Duraklat
               ) : (
-                <Play className="h-5 w-5" />
+                <Play className="h-5 w-5" /> // Oynat
               )}
             </Button>
+
             <Button
               size="icon"
               variant="ghost"
@@ -125,20 +127,22 @@ export const PlaybackControls = () => {
               onClick={playNext}
               disabled={!currentSong}
             >
-              <SkipForward className="h-4 w-4" />
+              <SkipForward className="h-4 w-4" /> {/* Sonraki şarkıya geç */}
             </Button>
+
             <Button
               size="icon"
               variant="ghost"
               className="hidden sm:inline-flex hover:text-white text-zinc-400"
             >
-              <Repeat className="h-4 w-4" />
+              <Repeat className="h-4 w-4" /> {/* Tekrar modu butonu */}
             </Button>
           </div>
 
+          {/* Zaman çubuğu */}
           <div className="hidden sm:flex items-center gap-2 w-full">
             <div className="text-xs text-zinc-400">
-              {formatTime(currentTime)}
+              {formatTime(currentTime)} {/* Geçerli süre */}
             </div>
             <Slider
               value={[currentTime]}
@@ -147,31 +151,35 @@ export const PlaybackControls = () => {
               className="w-full hover:cursor-grab active:cursor-grabbing"
               onValueChange={handleSeek}
             />
-            <div className="text-xs text-zinc-400">{formatTime(duration)}</div>
+            <div className="text-xs text-zinc-400">{formatTime(duration)}</div>{" "}
+            {/* Toplam süre */}
           </div>
         </div>
-        {/* volume controls */}
+
+        {/* Ses kontrolü */}
         <div className="hidden sm:flex items-center gap-4 min-w-[180px] w-[30%] justify-end">
           <Button
             size="icon"
             variant="ghost"
             className="hover:text-white text-zinc-400"
           >
-            <Mic2 className="h-4 w-4" />
+            <Mic2 className="h-4 w-4" />{" "}
+            {/* Mikrofon butonu (genelde karaoke vs. için) */}
           </Button>
           <Button
             size="icon"
             variant="ghost"
             className="hover:text-white text-zinc-400"
           >
-            <ListMusic className="h-4 w-4" />
+            <ListMusic className="h-4 w-4" /> {/* Playlist butonu */}
           </Button>
           <Button
             size="icon"
             variant="ghost"
             className="hover:text-white text-zinc-400"
           >
-            <Laptop2 className="h-4 w-4" />
+            <Laptop2 className="h-4 w-4" />{" "}
+            {/* Cihaz değiştir (örneğin bilgisayar/TV) */}
           </Button>
 
           <div className="flex items-center gap-2">
@@ -180,7 +188,7 @@ export const PlaybackControls = () => {
               variant="ghost"
               className="hover:text-white text-zinc-400"
             >
-              <Volume1 className="h-4 w-4" />
+              <Volume1 className="h-4 w-4" /> {/* Ses ikonu */}
             </Button>
 
             <Slider
@@ -189,9 +197,9 @@ export const PlaybackControls = () => {
               step={1}
               className="w-24 hover:cursor-grab active:cursor-grabbing"
               onValueChange={(value) => {
-                setVolume(value[0]);
+                setVolume(value[0]); // Ses seviyesini günceller
                 if (audioRef.current) {
-                  audioRef.current.volume = value[0] / 100;
+                  audioRef.current.volume = value[0] / 100; // <audio> sesini günceller
                 }
               }}
             />

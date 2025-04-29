@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosInstance } from "@/lib/axios"; // Axios ile API istekleri atmak için özel instance
 import { Album, Song, Stats } from "@/types"; // Tip tanımlamaları içe aktarılıyor
-import toast from "react-hot-toast";
+import toast from "react-hot-toast"; // React'ta toast bildirimleri için kullanılıyor
 import { create } from "zustand"; // Zustand store oluşturmak için gerekli fonksiyon
 
 interface MusicStore {
@@ -13,7 +13,7 @@ interface MusicStore {
   featuredSongs: Song[]; // Öne çıkan şarkılar
   madeForYouSongs: Song[]; // Kullanıcıya özel şarkılar
   trendingSongs: Song[]; // Trend olan şarkılar
-  stats: Stats;
+  stats: Stats; // İstatistikler
 
   fetchAlbums: () => Promise<void>; // Albüm listesini getiren fonksiyon
   fetchAlbumById: (id: string) => Promise<void>; // Belirli bir albümü ID ile getiren fonksiyon
@@ -21,9 +21,9 @@ interface MusicStore {
   fetchMadeForYouSongs: () => Promise<void>; // Kullanıcıya özel şarkıları getiren fonksiyon
   fetchTrendingSongs: () => Promise<void>; // Trend şarkıları getiren fonksiyon
   fetchStats: () => Promise<void>; // Tüm istatistikleri getiren fonksiyon
-  fetchAllSongs: () => Promise<void>;
-  deleteSong: (id: string) => Promise<void>;
-  deleteAlbum: (id: string) => Promise<void>;
+  fetchAllSongs: () => Promise<void>; // Tüm şarkıları getiren fonksiyon
+  deleteSong: (id: string) => Promise<void>; // Şarkıyı silen fonksiyon
+  deleteAlbum: (id: string) => Promise<void>; // Albümü silen fonksiyon
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
@@ -36,33 +36,35 @@ export const useMusicStore = create<MusicStore>((set) => ({
   featuredSongs: [], // Başlangıçta boş öne çıkan şarkı listesi
   trendingSongs: [], // Başlangıçta boş trend şarkı listesi
   stats: {
-    totalAlbums: 0,
-    totalArtists: 0,
-    totalSongs: 0,
-    totalUsers: 0,
+    totalAlbums: 0, // Toplam albüm sayısı
+    totalArtists: 0, // Toplam sanatçı sayısı
+    totalSongs: 0, // Toplam şarkı sayısı
+    totalUsers: 0, // Toplam kullanıcı sayısı
   },
 
   deleteAlbum: async (id) => {
-    set({ isLoading: true, error: null });
+    // Albüm silme fonksiyonu
+    set({ isLoading: true, error: null }); // Yükleme başlatılır, hata sıfırlanır
     try {
-      await AxiosInstance.delete(`/admin/albums/${id}`);
+      await AxiosInstance.delete(`/admin/albums/${id}`); // API isteği ile albüm silinir
       set((state) => ({
-        albums: state.albums.filter((album) => album._id !== id),
+        albums: state.albums.filter((album) => album._id !== id), // Silinen albüm listeden çıkarılır
         songs: state.songs.map((song) =>
           song.albumId === state.albums.find((a) => a._id === id)?.title
-            ? { ...song, album: null }
+            ? { ...song, album: null } // Albüm silindiyse, şarkının albümü null yapılır
             : song
         ),
       }));
-      toast.success("Album deleted successfully");
+      toast.success("Album deleted successfully"); // Başarılı mesajı
     } catch (error: any) {
-      toast.error("Failed to delete album: " + error.message);
+      toast.error("Failed to delete album: " + error.message); // Hata mesajı
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false }); // Yükleme durumu false yapılır
     }
   },
 
   fetchAlbums: async () => {
+    // Albümleri getiren fonksiyon
     set({ isLoading: true, error: null }); // Yükleme başlatılır, hata sıfırlanır
     try {
       const response = await AxiosInstance("/albums"); // Albüm listesini alır
@@ -75,89 +77,96 @@ export const useMusicStore = create<MusicStore>((set) => ({
   },
 
   fetchAlbumById: async (id) => {
+    // ID ile albüm detaylarını getiren fonksiyon
     set({ isLoading: true, error: null });
     try {
-      const response = await AxiosInstance.get(`/albums/${id}`); // ID ile albüm detayını getirir
+      const response = await AxiosInstance.get(`/albums/${id}`); // Albüm detayını alır
       set({ currentAlbum: response.data }); // Albüm detayını state'e aktarır
     } catch (error: any) {
-      set({ error: error.response.data.message });
+      set({ error: error.response.data.message }); // Hata mesajı
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false }); // Yükleme durumu false yapılır
     }
   },
 
   fetchFeaturedSongs: async () => {
+    // Öne çıkan şarkıları getiren fonksiyon
     set({ isLoading: true, error: null });
     try {
       const response = await AxiosInstance.get("/songs/featured"); // Öne çıkan şarkıları alır
       set({ featuredSongs: response.data }); // State'e aktarılır
     } catch (error: any) {
-      set({ error: error.response.data.message });
+      set({ error: error.response.data.message }); // Hata mesajı
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false }); // Yükleme tamamlanır
     }
   },
 
   fetchMadeForYouSongs: async () => {
+    // Kullanıcıya özel şarkıları getiren fonksiyon
     set({ isLoading: true, error: null });
     try {
       const response = await AxiosInstance.get("/songs/made-for-you"); // Kullanıcıya özel şarkılar
-      set({ madeForYouSongs: response.data });
+      set({ madeForYouSongs: response.data }); // State'e aktarılır
     } catch (error: any) {
-      set({ error: error.response.data.message });
+      set({ error: error.response.data.message }); // Hata mesajı
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false }); // Yükleme tamamlanır
     }
   },
 
   fetchTrendingSongs: async () => {
+    // Trend olan şarkıları getiren fonksiyon
     set({ isLoading: true, error: null });
     try {
       const response = await AxiosInstance.get("/songs/trending"); // Trend şarkılar
-      set({ trendingSongs: response.data });
+      set({ trendingSongs: response.data }); // State'e aktarılır
     } catch (error: any) {
-      set({ error: error.response.data.message });
+      set({ error: error.response.data.message }); // Hata mesajı
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false }); // Yükleme tamamlanır
     }
   },
 
   fetchAllSongs: async () => {
+    // Tüm şarkıları getiren fonksiyon
     set({ isLoading: true, error: null });
     try {
-      const response = await AxiosInstance.get("/songs");
-      set({ songs: response.data });
+      const response = await AxiosInstance.get("/songs"); // Tüm şarkıları alır
+      set({ songs: response.data }); // State'e aktarılır
     } catch (error: any) {
-      set({ error: error.response.data.message });
+      set({ error: error.response.data.message }); // Hata mesajı
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false }); // Yükleme tamamlanır
     }
   },
 
   fetchStats: async () => {
+    // İstatistikleri getiren fonksiyon
     set({ isLoading: true, error: null });
     try {
-      const response = await AxiosInstance.get("/stats");
-      set({ stats: response.data });
+      const response = await AxiosInstance.get("/stats"); // İstatistikleri alır
+      set({ stats: response.data }); // State'e aktarılır
     } catch (error: any) {
-      set({ error: error.response.data.message });
+      set({ error: error.response.data.message }); // Hata mesajı
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false }); // Yükleme tamamlanır
     }
   },
 
   deleteSong: async (id) => {
+    // Şarkıyı silen fonksiyon
     set({ isLoading: true, error: null });
     try {
-      await AxiosInstance.delete(`/admin/songs/${id}`);
+      await AxiosInstance.delete(`/admin/songs/${id}`); // API isteği ile şarkı silinir
       set((state) => ({
-        songs: state.songs.filter((song) => song._id !== id),
+        songs: state.songs.filter((song) => song._id !== id), // Silinen şarkı listeden çıkarılır
       }));
-      toast.success("Song deleted successfully");
+      toast.success("Song deleted successfully"); // Başarılı mesajı
     } catch (error: any) {
-      set({ error: error.response.data.message });
+      set({ error: error.response.data.message }); // Hata mesajı
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false }); // Yükleme durumu false yapılır
     }
   },
 }));
